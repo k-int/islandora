@@ -648,9 +648,18 @@ function islandora_ingest_form_next_submit(array $form, array &$form_state) {
  */
 function islandora_ingest_form_stash_info(array &$form_state) {
   $storage = &islandora_ingest_form_get_step_storage($form_state);
-  if ($storage) {
-    $storage['values'] = $form_state['values'];
-    unset($form_state['values']);
+  if (isset($storage)) {
+  	
+  	// Clear the storage values.
+  	unset($storage['values']);
+  	
+  	// Set to the new values.
+  	if (isset($form_state['values'])) {
+  		$storage['values'] = $form_state['values'];
+  	}
+  	
+  	// Clear the state values.
+  	unset($form_state['values']);
   }
 }
 
@@ -661,7 +670,8 @@ function islandora_ingest_form_stash_info(array &$form_state) {
  *   The Drupal form state.
  */
 function islandora_ingest_form_grab_info(array &$form_state) {
-  $storage = islandora_ingest_form_get_step_storage($form_state);
+	
+  $storage = &islandora_ingest_form_get_step_storage($form_state);
   $form_state['values'] = isset($storage['values']) ? $storage['values'] : array();
 }
 
